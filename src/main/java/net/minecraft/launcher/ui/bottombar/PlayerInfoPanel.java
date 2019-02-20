@@ -29,11 +29,7 @@ import net.minecraft.launcher.profile.ProfileManager;
 import net.minecraft.launcher.profile.RefreshedProfilesListener;
 import net.minecraft.launcher.profile.UserChangedListener;
 
-public class PlayerInfoPanel
-extends JPanel
-implements RefreshedVersionsListener,
-RefreshedProfilesListener,
-UserChangedListener {
+public class PlayerInfoPanel extends JPanel implements RefreshedVersionsListener, RefreshedProfilesListener, UserChangedListener {
     private final Launcher minecraftLauncher;
     private final JLabel welcomeText = new JLabel("", 0);
     private final JLabel versionText = new JLabel("", 0);

@@ -88,21 +88,21 @@ public class Main {
         String userHome = System.getProperty("user.home", ".");
         switch (OperatingSystem.getCurrentPlatform()) {
             case LINUX: {
-                workingDirectory = new File(userHome, ".minecraft/");
+                workingDirectory = new File(userHome, ".mclaunch/");
                 break;
             }
             case WINDOWS: {
                 String applicationData = System.getenv("APPDATA");
                 String folder = applicationData != null ? applicationData : userHome;
-                workingDirectory = new File(folder, ".minecraft/");
+                workingDirectory = new File(folder, ".mclaunch/");
                 break;
             }
             case OSX: {
-                workingDirectory = new File(userHome, "Library/Application Support/minecraft");
+                workingDirectory = new File(userHome, "Library/Application Support/mclaunch");
                 break;
             }
             default: {
-                workingDirectory = new File(userHome, "minecraft/");
+                workingDirectory = new File(userHome, "mclaunch/");
             }
         }
         return workingDirectory;

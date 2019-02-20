@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 mainClassName = 'net.minecraft.launcher.Main'
@@ -27,6 +27,12 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'
+    //compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.5' // Not needed?
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
+    compile group: 'org.apache.maven.plugins', name: 'maven-shade-plugin', version: '3.1.0'
+}
+
+shadowJar {
+    exclude '**/Log4j2Plugins.dat'
+    //transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer) // Not needed?
 }

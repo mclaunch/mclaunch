@@ -1,6 +1,7 @@
 package com.mojang.util;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -58,7 +59,8 @@ extends AbstractAppender {
         }
         QUEUE_LOCK.writeLock().unlock();
         if (layout == null) {
-            layout = PatternLayout.createLayout(null, null, null, null, false, false, null, null);
+            //layout = PatternLayout.createLayout(null, null, null, null, false, false, null, null);
+            layout = PatternLayout.createLayout(null, null, null, null, Charset.defaultCharset(), false, false, null, null);
         }
         return new QueueLogAppender(name, filter, layout, ignoreExceptions, queue);
     }
