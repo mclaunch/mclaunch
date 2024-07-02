@@ -296,6 +296,23 @@ implements VersionManager {
                 downloadable.setExpectedSize(object.getSize());
                 result.add(downloadable);
             }
+            File resourcesFolder = new File(baseDirectory, "resources");
+            FileUtils.deleteDirectory(resourcesFolder);
+            for (Map.Entry<AssetIndex.AssetObject, String> entry : index.getUniqueObjects().entrySet()) {
+                AssetIndex.AssetObject object = entry.getKey();
+                String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
+                File file = new File(objectsFolder, filename);
+                if (file.isFile() && FileUtils.sizeOf(file) == object.getSize()) {
+                	int lastIndexOf;
+                	if ((lastIndexOf = entry.getValue().lastIndexOf('/')) != -1) {
+                		File destFileFolder = new File(resourcesFolder, entry.getValue().substring(0, lastIndexOf));
+                		destFileFolder.mkdirs();
+                	}
+                	File destFile = new File(resourcesFolder, entry.getValue());
+                	FileUtils.copyFile(file, destFile);
+                }
+                
+            }
             long end = System.nanoTime();
             long delta = end - start;
             LOGGER.debug("Delta time to compare resources: " + delta / 1000000L + " ms ");
