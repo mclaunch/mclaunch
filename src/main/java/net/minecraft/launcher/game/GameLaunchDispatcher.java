@@ -50,7 +50,7 @@ implements GameRunnerListener {
         Profile profile = profileManager.getProfiles().isEmpty() ? null : profileManager.getSelectedProfile();
         UserAuthentication userAuthentication = user = profileManager.getSelectedUser() == null ? null : profileManager.getAuthDatabase().getByUUID(profileManager.getSelectedUser());
         if (user == null || !user.isLoggedIn() || profile == null || this.launcher.getLauncher().getVersionManager().getVersions(profile.getVersionFilter()).isEmpty()) {
-            return PlayStatus.LOADING;
+            return PlayStatus.CAN_PLAY_DEMO;
         }
         this.lock.lock();
         try {
