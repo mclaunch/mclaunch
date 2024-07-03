@@ -170,7 +170,9 @@ implements CompleteVersion {
                 neededFiles.add("libraries/" + file);
                 continue;
             }
-            neededFiles.add("libraries/" + library.getArtifactPath());
+            String file = library.getArtifactPath();
+            file = file.replace(":", "-");
+            neededFiles.add("libraries/" + file);
         }
         return neededFiles;
     }
