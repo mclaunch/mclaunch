@@ -90,11 +90,7 @@ implements Browser {
                                                  element = (Element) element.getParentNode(), href = element.getAttribute("href")) {
                                             }
                                             if (href != null && href.length() > 0) {
-                                                try {
-                                                    OperatingSystem.openLink(new URI(href));
-                                                } catch (Exception e) {
-                                                    JFXBrowser.LOGGER.error("Unexpected exception opening link " + href, e);
-                                                }
+                                            	loadUrl = new URI(href);
                                                 event.preventDefault();
                                                 event.stopPropagation();
                                             }
