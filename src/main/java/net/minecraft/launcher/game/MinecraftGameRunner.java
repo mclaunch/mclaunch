@@ -258,17 +258,19 @@ implements GameProcessRunnable {
             return virtualRoot;
         }
         AssetIndex index = this.gson.fromJson(FileUtils.readFileToString(indexFile, Charsets.UTF_8), AssetIndex.class);
-        LOGGER.info("Reconstructing virtual assets folder at " + virtualRoot);
-        for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
-            File target = new File(virtualRoot, entry.getKey());
-            File original = new File(new File(objectDir, entry.getValue().getHash().substring(0, 2)), entry.getValue().getHash());
-            if (target.isFile()) continue;
-            FileUtils.copyFile(original, target, false);
+        if (assetVersion.equals("legacy") || assetVersion.equals("pre-1.6") || index.isVirtual()) {
+            LOGGER.info("Reconstructing virtual assets folder at " + virtualRoot);
+            for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
+                File target = new File(virtualRoot, entry.getKey());
+                File original = new File(new File(objectDir, entry.getValue().getHash().substring(0, 2)), entry.getValue().getHash());
+                if (target.isFile()) continue;
+                FileUtils.copyFile(original, target, false);
+            }
+            FileUtils.writeStringToFile(new File(virtualRoot, ".lastused"), this.dateAdapter.serializeToString(new Date()));
+            File resourcesFolder = new File(this.getAssetsDir().getParentFile(), "resources");
+            FileUtils.deleteDirectory(resourcesFolder);
+            FileUtils.copyDirectory(virtualRoot, resourcesFolder);
         }
-        FileUtils.writeStringToFile(new File(virtualRoot, ".lastused"), this.dateAdapter.serializeToString(new Date()));
-        File resourcesFolder = new File(this.getAssetsDir().getParentFile(), "resources");
-        FileUtils.deleteDirectory(resourcesFolder);
-        FileUtils.copyDirectory(virtualRoot, resourcesFolder);
         return virtualRoot;
     }
 
