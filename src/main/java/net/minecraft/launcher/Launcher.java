@@ -510,11 +510,11 @@ public class Launcher {
     }
 
     public void performCleanups() throws IOException {
-        this.cleanupOrphanedVersions();
-        this.cleanupOrphanedAssets();
-        this.cleanupOldSkins();
-        this.cleanupOldNatives();
-        this.cleanupOldVirtuals();
+        //this.cleanupOrphanedVersions();
+    	//this.cleanupOrphanedAssets();
+    	//this.cleanupOldSkins();
+    	//this.cleanupOldNatives();
+    	this.cleanupOldVirtuals();
     }
 
     public ProfileManager getProfileManager() {

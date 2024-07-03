@@ -278,6 +278,7 @@ implements VersionManager {
         File assets = new File(baseDirectory, "assets");
         File objectsFolder = new File(assets, "objects");
         File indexesFolder = new File(assets, "indexes");
+        File virtualFolder = new File(assets, "virtual");
         long start = System.nanoTime();
         AssetIndexInfo indexInfo = version.getAssetIndex();
         File indexFile = new File(indexesFolder, indexInfo.getId() + ".json");
@@ -292,7 +293,7 @@ implements VersionManager {
                 String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
                 File file = new File(objectsFolder, filename);
                 if (file.isFile() && FileUtils.sizeOf(file) == object.getSize()) continue;
-                AssetDownloadable downloadable = new AssetDownloadable(proxy, entry.getValue(), object, "http://resources.download.minecraft.net/", objectsFolder);
+                AssetDownloadable downloadable = new AssetDownloadable(proxy, entry.getValue(), object, "https://resources.download.minecraft.net/", objectsFolder);
                 downloadable.setExpectedSize(object.getSize());
                 result.add(downloadable);
             }

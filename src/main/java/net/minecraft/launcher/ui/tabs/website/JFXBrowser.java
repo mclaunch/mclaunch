@@ -83,22 +83,6 @@ implements Browser {
                                 final EventListener listener = new EventListener() {
                                     @Override
                                     public void handleEvent(final Event event) {
-                                        if (event.getTarget() instanceof Element) {
-                                            Element element;
-                                            String href;
-                                            for (element = (Element) event.getTarget(), href = element.getAttribute("href"); StringUtils.isEmpty(href) && element.getParentNode() instanceof Element;
-                                                 element = (Element) element.getParentNode(), href = element.getAttribute("href")) {
-                                            }
-                                            if (href != null && href.length() > 0) {
-                                                try {
-                                                    OperatingSystem.openLink(new URI(href));
-                                                } catch (Exception e) {
-                                                    JFXBrowser.LOGGER.error("Unexpected exception opening link " + href, e);
-                                                }
-                                                event.preventDefault();
-                                                event.stopPropagation();
-                                            }
-                                        }
                                     }
                                 };
                                 final Document doc = JFXBrowser.this.webEngine.getDocument();

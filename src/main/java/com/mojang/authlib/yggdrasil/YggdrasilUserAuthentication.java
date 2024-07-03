@@ -75,28 +75,9 @@ extends HttpUserAuthentication {
             throw new InvalidCredentialsException("Invalid password");
         }
         LOGGER.info("Logging in with username & password");
-        AuthenticationRequest request = new AuthenticationRequest(this, this.getUsername(), this.getPassword());
-        AuthenticationResponse response = this.getAuthenticationService().makeRequest(ROUTE_AUTHENTICATE, request, AuthenticationResponse.class);
-        if (!response.getClientToken().equals(this.getAuthenticationService().getClientToken())) {
-            throw new AuthenticationException("Server requested we change our client token. Don't know how to handle this!");
-        }
-        if (response.getSelectedProfile() != null) {
-            this.setUserType(response.getSelectedProfile().isLegacy() ? UserType.LEGACY : UserType.MOJANG);
-        } else if (ArrayUtils.isNotEmpty(response.getAvailableProfiles())) {
-            this.setUserType(response.getAvailableProfiles()[0].isLegacy() ? UserType.LEGACY : UserType.MOJANG);
-        }
-        User user = response.getUser();
-        if (user != null && user.getId() != null) {
-            this.setUserid(user.getId());
-        } else {
-            this.setUserid(this.getUsername());
-        }
-        this.isOnline = true;
-        this.accessToken = response.getAccessToken();
-        this.profiles = response.getAvailableProfiles();
-        this.setSelectedProfile(response.getSelectedProfile());
+        this.setUserid(this.getUsername());
+        this.isOnline = false;
         this.getModifiableUserProperties().clear();
-        this.updateUserProperties(user);
     }
 
     protected void updateUserProperties(User user) {
@@ -184,23 +165,8 @@ extends HttpUserAuthentication {
 
     @Override
     public void selectGameProfile(GameProfile profile) throws AuthenticationException {
-        if (!this.isLoggedIn()) {
-            throw new AuthenticationException("Cannot change game profile whilst not logged in");
-        }
-        if (this.getSelectedProfile() != null) {
-            throw new AuthenticationException("Cannot change game profile. You must log out and back in.");
-        }
-        if (profile == null || !ArrayUtils.contains(this.profiles, profile)) {
-            throw new IllegalArgumentException("Invalid profile '" + profile + "'");
-        }
-        RefreshRequest request = new RefreshRequest(this, profile);
-        RefreshResponse response = this.getAuthenticationService().makeRequest(ROUTE_REFRESH, request, RefreshResponse.class);
-        if (!response.getClientToken().equals(this.getAuthenticationService().getClientToken())) {
-            throw new AuthenticationException("Server requested we change our client token. Don't know how to handle this!");
-        }
-        this.isOnline = true;
-        this.accessToken = response.getAccessToken();
-        this.setSelectedProfile(response.getSelectedProfile());
+        this.isOnline = false;
+        this.setSelectedProfile(profile);
     }
 
     @Override
