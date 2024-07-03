@@ -62,7 +62,7 @@ public class LauncherConstants {
     }
 
     public static String getVersionName() {
-        return Objects.firstNonNull(LauncherConstants.class.getPackage().getImplementationVersion(), "1.6.89-j");
+        return Objects.firstNonNull(LauncherConstants.class.getPackage().getImplementationVersion(), "1.6.93");
     }
 
     /*
