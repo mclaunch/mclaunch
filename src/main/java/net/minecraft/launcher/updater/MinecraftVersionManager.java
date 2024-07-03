@@ -278,6 +278,7 @@ implements VersionManager {
         File assets = new File(baseDirectory, "assets");
         File objectsFolder = new File(assets, "objects");
         File indexesFolder = new File(assets, "indexes");
+        File virtualFolder = new File(assets, "virtual");
         long start = System.nanoTime();
         AssetIndexInfo indexInfo = version.getAssetIndex();
         File indexFile = new File(indexesFolder, indexInfo.getId() + ".json");
@@ -295,24 +296,6 @@ implements VersionManager {
                 AssetDownloadable downloadable = new AssetDownloadable(proxy, entry.getValue(), object, "https://resources.download.minecraft.net/", objectsFolder);
                 downloadable.setExpectedSize(object.getSize());
                 result.add(downloadable);
-            }
-            File resourcesFolder = new File(baseDirectory, "resources");
-            FileUtils.deleteDirectory(resourcesFolder);
-            if (indexInfo.getId().equals("pre-1.6")) {
-            	for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
-                    AssetIndex.AssetObject object = entry.getValue();
-                    String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
-                    File file = new File(objectsFolder, filename);
-                    if (file.isFile() && FileUtils.sizeOf(file) == object.getSize()) {
-                    	int lastIndexOf;
-                    	if ((lastIndexOf = entry.getKey().lastIndexOf('/')) != -1) {
-                    		File destFileFolder = new File(resourcesFolder, entry.getKey().substring(0, lastIndexOf));
-                    		destFileFolder.mkdirs();
-                    	}
-                    	File destFile = new File(resourcesFolder, entry.getKey());
-                    	FileUtils.copyFile(file, destFile);
-                    }
-                }
             }
             long end = System.nanoTime();
             long delta = end - start;

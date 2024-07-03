@@ -27,6 +27,7 @@ import com.mojang.launcher.versions.CompleteVersion;
 import com.mojang.launcher.versions.ExtractRules;
 import com.mojang.launcher.versions.ReleaseType;
 import com.mojang.util.UUIDTypeAdapter;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -55,6 +56,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
 import net.minecraft.launcher.CompatibilityRule;
 import net.minecraft.launcher.CurrentLaunchFeatureMatcher;
 import net.minecraft.launcher.Launcher;
@@ -68,6 +70,7 @@ import net.minecraft.launcher.updater.ArgumentType;
 import net.minecraft.launcher.updater.AssetIndexInfo;
 import net.minecraft.launcher.updater.CompleteMinecraftVersion;
 import net.minecraft.launcher.updater.Library;
+
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -255,16 +258,17 @@ implements GameProcessRunnable {
             return virtualRoot;
         }
         AssetIndex index = this.gson.fromJson(FileUtils.readFileToString(indexFile, Charsets.UTF_8), AssetIndex.class);
-        if (index.isVirtual()) {
-            LOGGER.info("Reconstructing virtual assets folder at " + virtualRoot);
-            for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
-                File target = new File(virtualRoot, entry.getKey());
-                File original = new File(new File(objectDir, entry.getValue().getHash().substring(0, 2)), entry.getValue().getHash());
-                if (target.isFile()) continue;
-                FileUtils.copyFile(original, target, false);
-            }
-            FileUtils.writeStringToFile(new File(virtualRoot, ".lastused"), this.dateAdapter.serializeToString(new Date()));
+        LOGGER.info("Reconstructing virtual assets folder at " + virtualRoot);
+        for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
+            File target = new File(virtualRoot, entry.getKey());
+            File original = new File(new File(objectDir, entry.getValue().getHash().substring(0, 2)), entry.getValue().getHash());
+            if (target.isFile()) continue;
+            FileUtils.copyFile(original, target, false);
         }
+        FileUtils.writeStringToFile(new File(virtualRoot, ".lastused"), this.dateAdapter.serializeToString(new Date()));
+        File resourcesFolder = new File(this.getAssetsDir().getParentFile(), "resources");
+        FileUtils.deleteDirectory(resourcesFolder);
+        FileUtils.copyDirectory(virtualRoot, resourcesFolder);
         return virtualRoot;
     }
 
