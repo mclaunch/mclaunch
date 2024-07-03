@@ -178,9 +178,9 @@ implements VersionManager {
         boolean installed;
         boolean upToDate = installed = localVersion != null;
         CompleteMinecraftVersion resolved = null;
-        if (installed && remoteVersion != null) {
-            boolean bl = upToDate = !remoteVersion.getUpdatedTime().after(localVersion.getUpdatedTime());
-        }
+        //if (installed && remoteVersion != null) {
+        //    boolean bl = upToDate = !remoteVersion.getUpdatedTime().after(localVersion.getUpdatedTime());
+        //}
         if (localVersion instanceof CompleteVersion) {
             try {
                 resolved = ((CompleteMinecraftVersion)localVersion).resolve(this);
