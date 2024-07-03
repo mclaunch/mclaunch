@@ -151,7 +151,11 @@ implements CompleteVersion {
         ArrayList<File> result = new ArrayList<File>();
         for (Library library : libraries) {
             if (library.getNatives() != null) continue;
-            result.add(new File(base, "libraries/" + library.getArtifactPath()));
+            String file = library.getArtifactPath();
+            file = file.replace(":natives-windows-x86", "");
+            file = file.replace(":natives-windows-arm64", "");
+            file = file.replace(":natives-windows", "");
+            result.add(new File(base, "libraries/" + file));
         }
         result.add(new File(base, "versions/" + this.getJar() + "/" + this.getJar() + ".jar"));
         return result;
@@ -163,7 +167,11 @@ implements CompleteVersion {
             if (library.getNatives() != null) {
                 String natives = library.getNatives().get((Object)os);
                 if (natives == null) continue;
-                neededFiles.add("libraries/" + library.getArtifactPath(natives));
+                String file = library.getArtifactPath(natives);
+                file = file.replace(":natives-windows-x86", "");
+                file = file.replace(":natives-windows-arm64", "");
+                file = file.replace(":natives-windows", "");
+                neededFiles.add("libraries/" + file);
                 continue;
             }
             neededFiles.add("libraries/" + library.getArtifactPath());
@@ -186,6 +194,9 @@ implements CompleteVersion {
             } else {
                 file = library.getArtifactPath();
             }
+            file = file.replace(":natives-windows-x86", "");
+            file = file.replace(":natives-windows-arm64", "");
+            file = file.replace(":natives-windows", "");
             if (file == null || (download = library.createDownload(proxy, file, local = new File(targetDirectory, "libraries/" + file), ignoreLocalFiles, classifier)) == null) continue;
             neededFiles.add(download);
         }
